@@ -1,9 +1,0 @@
-#!/bin/bash
-
-####run as: addqueue -s -n 1x12 -q cmb -m 1.8 ./jobscript
-### can use berg, berg2 and cmb queues
-### output to /mnt/extraspace/kclough
-
-module load intel-compilers/18 mpi/3.1.3-intel
-export OMP_NUM_THREADS=1
-/usr/local/shared/slurm/bin/srun -n 32 -m cyclic --mpi=pmi2 ../../Main_ScalarField3d.Linux.64.mpicxx.ifort.OPTHIGH.MPI.OPENMPCC.ex params.txt
