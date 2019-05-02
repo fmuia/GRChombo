@@ -5,13 +5,11 @@ chk_prefix = ScalarField_
 plot_prefix = ScalarFieldp_
 #restart_file = ScalarField_000060.3d.hdf5
 
-# Initial condition for homogeneous K and phi
+# Initial condition for homogeneous phi
 amplitude_phi = 0.001 # initial amplitude of field in the potential
-K_initial = -0.0 #use to set initial homogenerous K
 
 # Scalar potential settings
-Lambda = 0.000115949 # scale of inflation in code units
-mu = 0.0238 # location (roughly) of reheat minimum
+scalar_mass = 0.1
 
 # Set up grid spacings and regrid params
 # NB - the N values need to be multiples of block_factor

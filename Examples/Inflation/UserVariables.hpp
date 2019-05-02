@@ -46,11 +46,7 @@ enum
     c_phi, // matter field added
     c_Pi,  //(minus) conjugate momentum
 
-    c_tau, // the proper time
-
     c_rho,    // the energy density of the SF
-    c_rhoAij, // the 'energy density' of the GWs
-
     c_Ham,
 
     c_Mom1,
@@ -83,7 +79,7 @@ static constexpr char const *variable_names[NUM_VARS] = {
 
     "phi",    "Pi",
 
-    "tau",    "rho",    "rhoAij",
+    "rho",
 
     "Ham",    "Mom1",   "Mom2",   "Mom3"};
 }

@@ -31,20 +31,8 @@ int runGRChombo(int argc, char *argv[])
                                                                   sim_params);
     setupAMRObject(gr_amr, scalar_field_level_fact);
 
-    double stop_time;
-    pp.get("stop_time", stop_time);
-    int max_steps;
-    pp.get("max_steps", max_steps);
-
-    // This allows one to run for just the initial output and then stop
-    int run_for_ICs = 0;
-    pp.query("run_for_ICs", run_for_ICs);
-
-    if (run_for_ICs == 0)
-    {
-        gr_amr.run(stop_time, max_steps);
-    }
-
+    // Engage! Run the evolution
+    gr_amr.run(sim_params.stop_time, sim_params.max_steps);
     gr_amr.conclude();
 
     return 0;

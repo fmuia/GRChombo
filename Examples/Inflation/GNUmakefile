@@ -6,6 +6,8 @@
 # Included makefiles need an absolute path to the Chombo installation
 # CHOMBO_HOME := Please set the CHOMBO_HOME locally (e.g. export CHOMBO_HOME=... in bash)
 
+GRCHOMBO_SOURCE = ../../Source
+
 ebase := Main_ScalarField
 
 LibNames := AMRTimeDependent AMRTools BoxTools
@@ -16,8 +18,6 @@ src_dirs := $(GRCHOMBO_SOURCE)/utils \
             $(GRCHOMBO_SOURCE)/Matter  \
             $(GRCHOMBO_SOURCE)/BoxUtils  \
             $(GRCHOMBO_SOURCE)/GRChomboCore  \
-            $(GRCHOMBO_SOURCE)/TaggingCriteria  \
-            $(GRCHOMBO_SOURCE)/AMRInterpolator  \
-            $(GRCHOMBO_SOURCE)/InitialConditions/ScalarFields
+            $(GRCHOMBO_SOURCE)/AMRInterpolator
 
 include $(CHOMBO_HOME)/mk/Make.test
