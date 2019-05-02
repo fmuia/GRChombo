@@ -1,3 +1,4 @@
+
 .bashrc
 jobscript*
 pout*
@@ -19,5 +20,7 @@ log*
 *.out
 *.hdf5
 *.dSYM
+Weyl_integral*
+ExtractionOut_*
 
 Doxygen/html

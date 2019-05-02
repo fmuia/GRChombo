@@ -705,38 +705,24 @@ void GRAMRLevel::writePlotLevel(HDF5Handle &a_handle) const
             pout() << header << endl;
 
         const DisjointBoxLayout &levelGrids = m_state_new.getBoxes();
-        IntVect iv_ghosts = m_num_ghosts*IntVect::Unit;
+        IntVect iv_ghosts = m_num_ghosts * IntVect::Unit;
         LevelData<FArrayBox> plot_data(levelGrids, num_states, iv_ghosts);
-        IntVect ghost_vector = IntVect::Zero;
 
-        if (m_p.nonperiodic_boundaries_exist)
+        for (int comp = 0; comp < num_states; comp++)
         {
-            ghost_vector = m_num_ghosts * IntVect::Unit;
-            Box grown_domain_box = m_problem_domain.domainBox();
-            grown_domain_box.grow(ghost_vector);
-            Copier boundary_copier;
-            boundary_copier.ghostDefine(
-                    m_state_new.disjointBoxLayout(),
-                    plot_data.disjointBoxLayout(), grown_domain_box,
-                    ghost_vector, ghost_vector);
-            for (int comp = 0; comp < num_states; comp++)
-            {
-                Interval currentComp(comp, comp);
-                Interval plotComps(plot_states[comp], plot_states[comp]);
-                m_state_new.copyTo(plotComps, plot_data, currentComp, boundary_copier);
-            }
-        }
-        else
-        {
-            for (int comp = 0; comp < num_states; comp++)
-            {
-                Interval currentComp(comp, comp);
-                Interval plotComps(plot_states[comp], plot_states[comp]);
-                m_state_new.copyTo(plotComps, plot_data, currentComp);
-            }
+            Interval currentComp(comp, comp);
+            Interval plotComps(plot_states[comp], plot_states[comp]);
+            m_state_new.copyTo(plotComps, plot_data, currentComp);
         }
 
         plot_data.exchange(plot_data.interval());
+
+        // only need to write ghosts when non periodic BCs exist
+        IntVect ghost_vector = IntVect::Zero;
+        if (m_p.write_plot_ghosts)
+        {
+            ghost_vector = m_num_ghosts * IntVect::Unit;
+        }
 
         // Write the data for this level
         write(a_handle, levelGrids);
