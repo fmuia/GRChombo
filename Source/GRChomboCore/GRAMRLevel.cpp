@@ -755,7 +755,7 @@ void GRAMRLevel::writePlotLevel(HDF5Handle &a_handle) const
         plot_data.exchange(plot_data.interval());
 
         // only need to write ghosts when non periodic BCs exist
-        IntVect ghost_vector = IntVect::Zero;
+//        IntVect ghost_vector = IntVect::Zero;
         if (m_p.write_plot_ghosts)
         {
             ghost_vector = m_num_ghosts * IntVect::Unit;

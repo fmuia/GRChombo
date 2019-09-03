@@ -80,16 +80,16 @@ class ChiAndPhiTaggingCriterion
         data_t criterion = simd_max(criterion_chi, criterion_phi);
 
         // regrid if within extraction level and not at required refinement
-        if (m_level < m_params.extraction_level)
-        {
-            const Coordinates<data_t> coords(current_cell, m_dx,
-                                             m_params.extraction_center);
-            const data_t r = coords.get_radius();
+//        if (m_level < m_params.extraction_level)
+//        {
+//            const Coordinates<data_t> coords(current_cell, m_dx,
+//                                             m_params.extraction_center);
+//            const data_t r = coords.get_radius();
             // add a 20% buffer to extraction zone so not too near to boundary
-            data_t regrid =
-                simd_compare_lt(r, 1.2 * m_params.extraction_radius);
-            criterion = simd_conditional(regrid, 1.0, criterion);
-        }
+//            data_t regrid =
+//                simd_compare_lt(r, 1.2 * m_params.extraction_radius);
+//            criterion = simd_conditional(regrid, 1.0, criterion);
+//        }
 
         // Write back into the flattened Chombo box
         current_cell.store_vars(criterion, 0);

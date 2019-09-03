@@ -1,8 +1,8 @@
 #Params for runtime inputs
 
 verbosity = 0
-chk_prefix = /mnt/extraspace/kclough/GeoInflation/GeoFieldchk_
-plot_prefix = /mnt/extraspace/kclough/GeoInflation/GeoFieldplot_
+chk_prefix = /NumericalInflationChk_
+plot_prefix = /NumericalInlfationPlot_
 #restart_file = ScalarField_000060.3d.hdf5
 
 # Set up grid spacings and regrid params
@@ -39,7 +39,7 @@ block_factor = 32
 checkpoint_interval = 1000
 plot_interval = 5
 dt_multiplier = 0.2
-stop_time = 90.0
+stop_time = 100.0
 #max_steps = 10000000
 
 #Lapse evolution
@@ -75,7 +75,7 @@ scalar_mass2 = 0.1
 
 # SF parameter for bubble centre - defaulted to center of grid
 # so only uncomment if you want to place it off center
-amplitudeSF = 0.01
-widthSF = 1.0
-r_zero = 0.0
+#amplitudeSF = 0.01
+#widthSF = 1.0
+#r_zero = 0.0
 #centerSF = 32 32 32

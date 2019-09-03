@@ -193,11 +193,11 @@ class ChomboParameters
     bool nonperiodic_boundaries_exist;
     bool symmetric_boundaries_exist;
 
-    // Boundary conditions
-    std::array<bool, CH_SPACEDIM> isPeriodic;     // periodicity
-    BoundaryConditions::params_t boundary_params; // set boundaries in each dir
-    bool nonperiodic_boundaries_exist;
-    bool symmetric_boundaries_exist;
+//    // Boundary conditions
+//    std::array<bool, CH_SPACEDIM> isPeriodic;     // periodicity
+//    BoundaryConditions::params_t boundary_params; // set boundaries in each dir
+//    bool nonperiodic_boundaries_exist;
+//    bool symmetric_boundaries_exist;
 
     // For tagging
     double regrid_threshold;

@@ -165,6 +165,104 @@ void BoundaryConditions::fill_boundary_rhs(const Side::LoHiSide a_side,
     }
 }
 
+void BoundaryConditions::fill_sommerfeld_cell(FArrayBox &rhs_box,
+                                              const FArrayBox &soln_box,
+                                              const IntVect iv) const
+{
+    // assumes an asymptotic value + radial waves and permits them
+    // to exit grid with minimal reflections
+    // get real position on the grid
+    RealVect loc(iv + 0.5 * RealVect::Unit);
+    loc *= m_dx;
+    loc -= m_center;
+    double radius_squared = 0.0;
+    FOR1(i) { radius_squared += loc[i] * loc[i]; }
+    double radius = sqrt(radius_squared);
+    IntVect lo_local_offset = iv - soln_box.smallEnd();
+    IntVect hi_local_offset = soln_box.bigEnd() - iv;
+
+    // Apply Sommerfeld BCs to each variable
+    for (int icomp = 0; icomp < NUM_VARS; icomp++)
+    {
+        rhs_box(iv, icomp) = 0.0;
+        FOR1(idir2)
+        {
+            IntVect iv_offset1 = iv;
+            IntVect iv_offset2 = iv;
+            double d1;
+            // bit of work to get the right stencils for near
+            // the edges of the domain, only using second order
+            // stencils for now
+            if (lo_local_offset[idir2] < 1)
+            {
+                // near lo end
+                iv_offset1[idir2] += +1;
+                iv_offset2[idir2] += +2;
+                d1 = 1.0 / m_dx *
+                     (-1.5 * soln_box(iv, icomp) +
+                      2.0 * soln_box(iv_offset1, icomp) -
+                      0.5 * soln_box(iv_offset2, icomp));
+            }
+            else if (hi_local_offset[idir2] < 1)
+            {
+                // near hi end
+                iv_offset1[idir2] += -1;
+                iv_offset2[idir2] += -2;
+                d1 = 1.0 / m_dx *
+                     (+1.5 * soln_box(iv, icomp) -
+                      2.0 * soln_box(iv_offset1, icomp) +
+                      0.5 * soln_box(iv_offset2, icomp));
+            }
+            else
+            {
+                // normal case
+                iv_offset1[idir2] += +1;
+                iv_offset2[idir2] += -1;
+                d1 =
+                    0.5 / m_dx *
+                    (soln_box(iv_offset1, icomp) - soln_box(iv_offset2, icomp));
+            }
+
+            // for each direction add dphidx * x^i / r
+            rhs_box(iv, icomp) += -d1 * loc[idir2] / radius;
+        }
+
+        // asymptotic values - these need to have been set in
+        // the params file
+        rhs_box(iv, icomp) +=
+            (m_params.vars_asymptotic_values[icomp] - soln_box(iv, icomp)) /
+            radius;
+    }
+}
+
+void BoundaryConditions::fill_reflective_cell(FArrayBox &rhs_box,
+                                              const IntVect iv,
+                                              const Side::LoHiSide a_side,
+                                              const int dir) const
+{
+    // assume boundary is a reflection of values within the grid
+    // care must be taken with variable parity to maintain correct
+    // values on reflection, e.g. x components of vectors are odd
+    // parity in the x direction
+    IntVect iv_copy = iv;
+    /// where to copy the data from - mirror image in domain
+    if (a_side == Side::Lo)
+    {
+        iv_copy[dir] = -iv[dir] - 1;
+    }
+    else
+    {
+        iv_copy[dir] = 2 * m_domain_box.bigEnd(dir) - iv[dir] + 1;
+    }
+
+    // replace value at iv with value at iv_copy
+    for (int icomp = 0; icomp < NUM_VARS; icomp++)
+    {
+        int parity = get_vars_parity(icomp, dir);
+        rhs_box(iv, icomp) = parity * rhs_box(iv_copy, icomp);
+    }
+}
+
 /// Fill the boundary values appropriately based on the params set
 /// in the direction dir
 void BoundaryConditions::fill_boundary_rhs_dir(const Side::LoHiSide a_side,
