@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 .bashrc
 jobscript*
 pout*
 my_extraction*
+=======
+jobscript*
+pout.*
+.bashrc
+>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
 *.pbs
+*.sh
 *.s
+<<<<<<< HEAD
 *.sh
 *.err
 *.btr
+=======
+jobscript*
+>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
 d
 o
 p
@@ -19,5 +30,7 @@ log*
 *.out
 *.hdf5
 *.dSYM
+Weyl_integral*
+ExtractionOut_*
 
 Doxygen/html

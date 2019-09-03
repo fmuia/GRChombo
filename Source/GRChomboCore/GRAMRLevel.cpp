@@ -320,6 +320,17 @@ void GRAMRLevel::regrid(const Vector<Box> &a_new_grids)
     m_state_old.define(level_domain, NUM_VARS, iv_ghosts);
 }
 
+/// things to do after regridding
+void GRAMRLevel::postRegrid(int a_base_level)
+{
+    // set m_restart_time to same as the coarser level
+    if (m_level > a_base_level && m_coarser_level_ptr != nullptr)
+    {
+        GRAMRLevel *coarser_gr_amr_level_ptr = gr_cast(m_coarser_level_ptr);
+        m_restart_time = coarser_gr_amr_level_ptr->m_restart_time;
+    }
+}
+
 // initialize grid
 void GRAMRLevel::initialGrid(const Vector<Box> &a_new_grids)
 {
@@ -705,9 +716,14 @@ void GRAMRLevel::writePlotLevel(HDF5Handle &a_handle) const
             pout() << header << endl;
 
         const DisjointBoxLayout &levelGrids = m_state_new.getBoxes();
+//<<<<<<< HEAD
         IntVect iv_ghosts = m_num_ghosts*IntVect::Unit;
         LevelData<FArrayBox> plot_data(levelGrids, num_states, iv_ghosts);
         IntVect ghost_vector = IntVect::Zero;
+//=======
+//        IntVect iv_ghosts = m_num_ghosts * IntVect::Unit;
+//        LevelData<FArrayBox> plot_data(levelGrids, num_states, iv_ghosts);
+//>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
 
         if (m_p.nonperiodic_boundaries_exist)
         {
@@ -737,6 +753,13 @@ void GRAMRLevel::writePlotLevel(HDF5Handle &a_handle) const
         }
 
         plot_data.exchange(plot_data.interval());
+
+        // only need to write ghosts when non periodic BCs exist
+        IntVect ghost_vector = IntVect::Zero;
+        if (m_p.write_plot_ghosts)
+        {
+            ghost_vector = m_num_ghosts * IntVect::Unit;
+        }
 
         // Write the data for this level
         write(a_handle, levelGrids);

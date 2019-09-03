@@ -49,31 +49,39 @@ class ChomboParameters
                 // read in relevent params - note that no defaults are set so as
                 // to force the user to specify them where the relevant BCs are
                 // selected
+//<<<<<<< HEAD
 
                 //KC I have set defaults here to avoid the need to amend the params
                 // files. We should remove this after we finish these runs.
+                // FM: I will remove the defaults here.
+//=======
+//>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
                 if ((boundary_params.hi_boundary[idir] ==
                      BoundaryConditions::REFLECTIVE_BC) ||
                     (boundary_params.lo_boundary[idir] ==
                      BoundaryConditions::REFLECTIVE_BC))
                 {
                     symmetric_boundaries_exist = true;
-                    pp.load("vars_parity", boundary_params.vars_parity, boundary_params.vars_parity);
-                    boundary_params.vars_parity[c_h12] = 4;
-                    boundary_params.vars_parity[c_h13] = 6;
-                    boundary_params.vars_parity[c_h23] = 5;
-                    boundary_params.vars_parity[c_A12] = 4;
-                    boundary_params.vars_parity[c_A13] = 6;
-                    boundary_params.vars_parity[c_A23] = 5;
-                    boundary_params.vars_parity[c_shift1] = 1;
-                    boundary_params.vars_parity[c_shift2] = 2;
-                    boundary_params.vars_parity[c_shift3] = 3;
-                    boundary_params.vars_parity[c_B1] = 1;
-                    boundary_params.vars_parity[c_B2] = 2;
-                    boundary_params.vars_parity[c_B3] = 3;
-                    boundary_params.vars_parity[c_Gamma1] = 1;
-                    boundary_params.vars_parity[c_Gamma2] = 2;
-                    boundary_params.vars_parity[c_Gamma3] = 3;
+//<<<<<<< HEAD
+//                    pp.load("vars_parity", boundary_params.vars_parity, boundary_params.vars_parity);
+//                    boundary_params.vars_parity[c_h12] = 4;
+//                    boundary_params.vars_parity[c_h13] = 6;
+//                    boundary_params.vars_parity[c_h23] = 5;
+//                    boundary_params.vars_parity[c_A12] = 4;
+//                    boundary_params.vars_parity[c_A13] = 6;
+//                    boundary_params.vars_parity[c_A23] = 5;
+//                    boundary_params.vars_parity[c_shift1] = 1;
+//                    boundary_params.vars_parity[c_shift2] = 2;
+//                    boundary_params.vars_parity[c_shift3] = 3;
+//                    boundary_params.vars_parity[c_B1] = 1;
+//                    boundary_params.vars_parity[c_B2] = 2;
+//                    boundary_params.vars_parity[c_B3] = 3;
+//                    boundary_params.vars_parity[c_Gamma1] = 1;
+//                    boundary_params.vars_parity[c_Gamma2] = 2;
+//                    boundary_params.vars_parity[c_Gamma3] = 3;
+//=======
+                    pp.load("vars_parity", boundary_params.vars_parity);
+//>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
                 }
                 if ((boundary_params.hi_boundary[idir] ==
                      BoundaryConditions::SOMMERFELD_BC) ||
@@ -81,12 +89,16 @@ class ChomboParameters
                      BoundaryConditions::SOMMERFELD_BC))
                 {
                     pp.load("vars_asymptotic_values",
-                            boundary_params.vars_asymptotic_values, boundary_params.vars_asymptotic_values);
-                    boundary_params.vars_asymptotic_values[c_chi] = 1;
-                    boundary_params.vars_asymptotic_values[c_h11] = 1;
-                    boundary_params.vars_asymptotic_values[c_h22] = 1;
-                    boundary_params.vars_asymptotic_values[c_h33] = 1;
-                    boundary_params.vars_asymptotic_values[c_lapse] = 1;
+//<<<<<<< HEAD
+//                            boundary_params.vars_asymptotic_values, boundary_params.vars_asymptotic_values);
+//                    boundary_params.vars_asymptotic_values[c_chi] = 1;
+//                    boundary_params.vars_asymptotic_values[c_h11] = 1;
+//                    boundary_params.vars_asymptotic_values[c_h22] = 1;
+//                    boundary_params.vars_asymptotic_values[c_h33] = 1;
+//                    boundary_params.vars_asymptotic_values[c_lapse] = 1;
+//=======
+                            boundary_params.vars_asymptotic_values);
+//>>>>>>> ced4f5fce193163cddb981c781f2890014b78ab3
                 }
             }
         }
@@ -131,6 +143,8 @@ class ChomboParameters
         pp.load("plot_prefix", plot_prefix);
         pp.load("stop_time", stop_time, 1.0);
         pp.load("max_steps", max_steps, 1000000);
+        pp.load("write_plot_ghosts", write_plot_ghosts,
+                nonperiodic_boundaries_exist);
 
         // alias the weird chombo names to something more descriptive
         // for these box params, and default to some reasonable values
@@ -171,6 +185,13 @@ class ChomboParameters
     int max_grid_size, block_factor;        // max and min box sizes
     double fill_ratio; // determines how fussy the regridding is about tags
     std::string checkpoint_prefix, plot_prefix; // naming of files
+    bool write_plot_ghosts;
+
+    // Boundary conditions
+    std::array<bool, CH_SPACEDIM> isPeriodic;     // periodicity
+    BoundaryConditions::params_t boundary_params; // set boundaries in each dir
+    bool nonperiodic_boundaries_exist;
+    bool symmetric_boundaries_exist;
 
     // Boundary conditions
     std::array<bool, CH_SPACEDIM> isPeriodic;     // periodicity

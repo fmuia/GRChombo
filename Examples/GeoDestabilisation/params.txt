@@ -1,0 +1,81 @@
+#Params for runtime inputs
+
+verbosity = 0
+chk_prefix = /mnt/extraspace/kclough/GeoInflation/GeoFieldchk_
+plot_prefix = /mnt/extraspace/kclough/GeoInflation/GeoFieldplot_
+#restart_file = ScalarField_000060.3d.hdf5
+
+# Set up grid spacings and regrid params
+# NB - the N values need to be multiples of block_factor
+N1 = 128
+N2 = 128
+N3 = 128
+
+# Length of longest box side, dx_coarsest = L/N(max)
+# NB if non cubic, this determines dx for all sides
+L =  32
+
+# Regridding
+# Thresholds on the change across a cell which prompts regrid
+regrid_threshold_chi = 0.5
+regrid_threshold_phi = 0.5
+
+# Level data
+# Maximum number of times you can regrid above coarsest level
+max_level = 0 # There are (max_level+1) grids, so min is zero
+# Frequency of regridding at each level
+# Need one for each level, ie max_level+1 items
+# Generally you do not need to regrid frequently on every level
+regrid_interval = 64 32 16 8 4 2 1
+# Ratio of dx_coarse/dx_fine at each level, usually best to stick to 2
+# Max box size
+max_grid_size = 32
+# Min box size
+block_factor = 32
+
+# Set up time steps
+# dt will be dx*dt_multiplier on each grid level
+# HDF5files are written every dt = L/N*dt_multiplier*checkpoint_interval
+checkpoint_interval = 1000
+plot_interval = 5
+dt_multiplier = 0.2
+stop_time = 90.0
+#max_steps = 10000000
+
+#Lapse evolution
+lapse_power = 1.0
+lapse_coeff = 0.3
+lapse_advec_coeff = 1 # 1 makes the lapse gauge 1+log slicing
+
+# Shift evolution coefficients
+shift_advec_coeff = 0 # Usually no advection for beta
+shift_Gamma_coeff = 0.75 # 
+eta = 1.0 # This is beta_driver, usually of order 1/M_ADM of spacetime
+
+# CCZ4 parameters
+# if using BSSN the kappa values should be zero
+formulation = 1  # 1 for BSSN, 0 for CCZ4
+kappa1 = 0
+kappa2 = 0
+kappa3 = 0
+covariantZ4 = 0 # 0: default. 1: dampk1 -> dampk1/lapse
+
+# coefficient for KO numerical dissipation
+# NB must be less than 0.5 for stability
+sigma = 0.3
+
+# Change the gravitational constant of the Universe!
+# Default is 1.0, for standard geometric units
+# G_Newton = 1.0
+
+# SF Initial data - note masses are in units of reduced Mpl
+# sqrt 8pi factors are added in the code
+scalar_mass1 = 0.1
+scalar_mass2 = 0.1
+
+# SF parameter for bubble centre - defaulted to center of grid
+# so only uncomment if you want to place it off center
+amplitudeSF = 0.01
+widthSF = 1.0
+r_zero = 0.0
+#centerSF = 32 32 32
